@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\EmployeeController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\SupplierController;
+use App\Http\Controllers\Backend\CategoryController;
 
 //Login Routes 
 
@@ -22,7 +23,6 @@ Route::get('/user',[UserController::class,'User'])->middleware('auth:api');
 
 
 Route::controller(EmployeeController::class)->group(function(){
-
     Route::get('/allemployees','AllEmployee');
     Route::post('/addemployee','store');
     Route::get('/editemployee/{id}','edit');
@@ -32,9 +32,10 @@ Route::controller(EmployeeController::class)->group(function(){
 });
 
 Route::controller(CustomerController::class)->group(function(){
-    Route::get('/allcustomers','AllCustomers');
+    Route::get('/allcustomers','AllCustomers'); 
+    Route::post('/upload/customers','uploads');
     Route::post('/addcustomer','store');
-    Route::get('/editcustomer/{id}','edit');
+    // Route::get('/editcustomer/{id}','edit');
     Route::put('/updatecustomer/{id}','update');
     Route::delete('/deletecustomer/{id}','destroy');
 });
@@ -46,6 +47,13 @@ Route::controller(SupplierController::class)->group(function(){
     Route::get('/editsupplier/{id}','edit');
     Route::put('/updatesupplier/{id}','update');
     Route::delete('/deletesupplier/{id}','destroy');
+});
+
+Route::controller(CategoryController::class)->group(function(){
+    Route::get('/allcategories','AllCategories');
+    Route::post('/addcategory','store');
+    Route::put('/updatecategory/{id}','update');
+    Route::delete('/deletecategory/{id}','destroy');
 });
 
 

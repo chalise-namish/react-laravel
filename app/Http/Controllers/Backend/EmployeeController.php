@@ -80,7 +80,7 @@ class EmployeeController extends Controller
     $validator = Validator::make($request->all(), [
             'code'=> 'required|max:200',
             'name' => 'required|max:200',
-            'email' => 'required|unique:employees|max:200',
+            'email' => 'required|max:200',
             'phone' => 'required|max:10|min:10',
             'position' => 'required|max:200',
             'salary' => 'required|max:200',
@@ -92,9 +92,19 @@ class EmployeeController extends Controller
             'validate_err' => $validator->errors(),
         ], 422);
     }
+     
 
     $employee = Employee::findOrFail($id);
-  
+
+       // Update the employee fields
+       $employee->code = $request->code;
+       $employee->name = $request->name;
+       $employee->email = $request->email;
+       $employee->phone = $request->phone;
+       $employee->position = $request->position;
+       $employee->salary = $request->salary;
+       $employee->join_date = $request->join_date;
+       
      if($request->hasFile('image')) {
         $image = $request->file('image');
         $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
@@ -108,17 +118,10 @@ class EmployeeController extends Controller
         Image::make($documents)->resize(300,300)->save('upload/documents/'.$name_gen);
         $employee->documents = 'upload/documents/'.$name_gen;
     }     
-    // Update the employee fields
-    $employee->code = $request->code;
-    $employee->name = $request->name;
-    $employee->email = $request->email;
-    $employee->phone = $request->phone;
-    $employee->position = $request->position;
-    $employee->salary = $request->salary;
-    $employee->join_date = $request->join_date;
     $employee->save();
-       
+  
      return response()->json($employee, 200);
+
    }//End Method
 
      public function destroy($id)
